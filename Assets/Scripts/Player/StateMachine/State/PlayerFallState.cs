@@ -14,11 +14,22 @@ public class PlayerFallState : PlayerBaseState
 
     public override void FixedUpdateState(PlayerStateManager player)
     {
-
+        player.controller.Move();
     }
 
     public override void UpdateState(PlayerStateManager player)
     {
+        if (player.controller.isGrounded)
+        {
+            if (player.controller.moveValue != Vector2.zero)
+            {
+                player.SwitchState(player.moveState);
+            }
+            else
+            {
+                player.SwitchState(player.idleState);
+            }
 
+        }
     }
 }

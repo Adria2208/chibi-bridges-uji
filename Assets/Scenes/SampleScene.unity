@@ -131,6 +131,8 @@ GameObject:
   - component: {fileID: 90332375}
   - component: {fileID: 90332374}
   - component: {fileID: 90332377}
+  - component: {fileID: 90332379}
+  - component: {fileID: 90332378}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -285,6 +287,38 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &90332378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90332372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae01cd627a935c885877aee934c43e37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStateManager
+  controller: {fileID: 90332379}
+--- !u!114 &90332379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90332372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b092e18bec8dc1a4e876cc15ef080fdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  moveValue: {x: 0, y: 0}
+  isJumping: 0
+  moveSpeed: 6
+  jumpForce: 6
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +597,7 @@ GameObject:
   - component: {fileID: 1482769465}
   - component: {fileID: 1482769464}
   - component: {fileID: 1482769463}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

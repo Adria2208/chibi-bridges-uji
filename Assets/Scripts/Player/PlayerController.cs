@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private LayerMask groundLayer;
+    [SerializeField] private LayerMask groundLayer;
     private float feetCollision = 0.05f;
 
     private InputAction moveAction;
@@ -15,19 +15,19 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 6f;
     public bool isGrounded { get; private set; }
     public Rigidbody2D rb { get; private set; }
-    private BoxCollider2D bodyCollider;
+    private CapsuleCollider2D bodyCollider;
     private Vector2 bodySize;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        bodyCollider =  GetComponent<BoxCollider2D>();
+        bodyCollider =  GetComponent<CapsuleCollider2D>();
     }
 
     void Start()
     {
         moveAction = InputSystem.actions.FindAction("Move");
-        moveAction = InputSystem.actions.FindAction("Jump");
+        jumpAction = InputSystem.actions.FindAction("Jump");
 
         bodySize = bodyCollider.bounds.size;
         bodySize.y -= feetCollision;

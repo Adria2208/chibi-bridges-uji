@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class PlayerIdleState : PlayerBaseState
+public class PlayerJumpState : PlayerBaseState
 {
     public override void EnterState(PlayerStateManager player)
     {
-        Debug.Log("Entered Idle State");
-        player.controller.Stop();
+        Debug.Log("Entered Jump State");
+        player.controller.Jump();
     }
 
     public override void ExitState(PlayerStateManager player)
     {
-
+        
     }
 
     public override void FixedUpdateState(PlayerStateManager player)
@@ -20,14 +20,9 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        if (player.controller.moveValue != Vector2.zero)
+        if (!player.controller.isGrounded)
         {
-            player.SwitchState(player.moveState);
-        }
-
-        if (player.controller.isJumping)
-        {
-            player.SwitchState(player.jumpState);
+            player.SwitchState(player.fallState);
         }
     }
 }
