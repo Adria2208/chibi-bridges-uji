@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,23 +12,36 @@ public class PlayerController : MonoBehaviour
     public Vector2 moveValue;
     public bool isJumping;
 
-    public float moveSpeed = 6f; 
-    public float jumpForce = 6f;
+
+    [SerializeField] private float maxSpeed;
+
+    [SerializeField] private float acceleration;
+    [SerializeField] private float deceleration;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float fastFallMultiplier;
+    [SerializeField] private float originalGravityScale;
+
+    [SerializeField] private double debugCurrentSpeedX;
+    [SerializeField] private double debugCurrentSpeedY;
+
+
     public bool isGrounded { get; private set; }
     public Rigidbody2D rb { get; private set; }
-    private CapsuleCollider2D bodyCollider;
+    [SerializeField] private CapsuleCollider2D bodyCollider;
     private Vector2 bodySize;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        bodyCollider =  GetComponent<CapsuleCollider2D>();
+        bodyCollider = GetComponent<CapsuleCollider2D>();
     }
 
     void Start()
     {
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
+
+        originalGravityScale = rb.gravityScale;
 
         bodySize = bodyCollider.bounds.size;
         bodySize.y -= feetCollision;
@@ -37,6 +51,7 @@ public class PlayerController : MonoBehaviour
     {
         moveValue = moveAction.ReadValue<Vector2>();
         isJumping = jumpAction.WasPressedThisFrame();
+
     }
 
     void FixedUpdate()
@@ -51,18 +66,35 @@ public class PlayerController : MonoBehaviour
         );
 
         isGrounded = hit.collider != null;
+
+
+        if (rb.linearVelocityY < 0) // Is falling
+            rb.gravityScale = originalGravityScale * fastFallMultiplier;
+        else
+            rb.gravityScale = originalGravityScale;
+
+        debugCurrentSpeedX = Math.Truncate(100 * rb.linearVelocityX) / 100;
+        debugCurrentSpeedY = Math.Truncate(100 * rb.linearVelocityY) / 100;
     }
 
     public void Move()
     {
-        rb.linearVelocity = new Vector2(moveValue.x * moveSpeed, rb.linearVelocityY);
+        float targetSpeed = moveValue.x * maxSpeed;
+        float speedDifference = targetSpeed - rb.linearVelocityX;
+
+        // Use acceleration when input exists, deceleration when stopping
+        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : deceleration;
+
+        float movement = accelRate * speedDifference * Time.fixedDeltaTime;
+
+        rb.linearVelocity = new Vector2(
+            rb.linearVelocityX + movement,
+            rb.linearVelocityY
+        );
     }
     public void Jump()
     {
-        rb.linearVelocity += new Vector2(rb.linearVelocityX, rb.linearVelocityY + jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
     }
-    public void Stop()
-    {
-        rb.linearVelocityX = 0;
-    }
+
 }

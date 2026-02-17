@@ -5,7 +5,6 @@ public class PlayerIdleState : PlayerBaseState
     public override void EnterState(PlayerStateManager player)
     {
         Debug.Log("Entered Idle State");
-        player.controller.Stop();
     }
 
     public override void ExitState(PlayerStateManager player)
@@ -15,7 +14,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void FixedUpdateState(PlayerStateManager player)
     {
-
+        player.controller.Move();
     }
 
     public override void UpdateState(PlayerStateManager player)
