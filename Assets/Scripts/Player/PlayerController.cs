@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction jumpAction;
-    public Vector2 moveValue;
     public bool isJumping;
 
     [SerializeField] private PlayerData playerData;
@@ -19,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
 
     public bool isGrounded { get; private set; }
+    public float lastJumpPressedTime;
+    public float horizontalInput;
     public Rigidbody2D rb { get; private set; }
     [SerializeField] private CapsuleCollider2D bodyCollider;
     private Vector2 bodySize;
@@ -40,8 +41,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        moveValue = moveAction.ReadValue<Vector2>();
+        horizontalInput = moveAction.ReadValue<Vector2>().x;
         isJumping = jumpAction.WasPressedThisFrame();
+
+        if (isJumping)
+        {
+            lastJumpPressedTime = Time.time;
+        }
 
     }
 
@@ -70,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     public void Move()
     {
-        float targetSpeed = moveValue.x * playerData.maxSpeed;
+        float targetSpeed = horizontalInput * playerData.maxSpeed;
         float speedDifference = targetSpeed - rb.linearVelocityX;
 
         // Use acceleration when input exists, deceleration when stopping
@@ -86,6 +92,11 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocityX, playerData.jumpForce);
+    }
+
+    public bool HasBufferedJump()
+    {
+        return Time.time - lastJumpPressedTime <= playerData.jumpBufferTime;
     }
 
 }

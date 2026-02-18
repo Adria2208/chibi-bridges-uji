@@ -21,7 +21,11 @@ public class PlayerFallState : PlayerBaseState
     {
         if (player.controller.isGrounded)
         {
-            if (player.controller.moveValue != Vector2.zero)
+            if (player.controller.HasBufferedJump())
+            {
+                player.SwitchState(player.jumpState);
+            } 
+            else if (player.controller.horizontalInput != 0f)
             {
                 player.SwitchState(player.moveState);
             }

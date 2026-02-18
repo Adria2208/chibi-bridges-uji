@@ -16,5 +16,6 @@ MonoBehaviour:
   acceleration: 20
   deceleration: 16
   jumpForce: 15
+  jumpBufferTime: 0.2
   fastFallMultiplier: 2
   originalGravityScale: 4

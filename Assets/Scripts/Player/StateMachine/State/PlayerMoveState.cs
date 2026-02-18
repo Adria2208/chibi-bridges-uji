@@ -14,7 +14,7 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void FixedUpdateState(PlayerStateManager player)
     {
-        if (player.controller.moveValue == Vector2.zero)
+        if (player.controller.horizontalInput == 0f)
         {
             player.SwitchState(player.idleState);
         }
