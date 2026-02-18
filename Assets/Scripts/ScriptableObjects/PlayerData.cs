@@ -7,7 +7,7 @@ public class PlayerData : ScriptableObject
     public float maxSpeed;
     public float acceleration;
     public float deceleration;
-    
+
     [Header("Jump parameters")]
     public float jumpForce;
     [Range(0f, 0.5f)]
@@ -24,4 +24,6 @@ public class PlayerData : ScriptableObject
     public float originalGravityScale;
     [Range(0f, 1f)]
     public float jumpHangGravityMultiplier;
+    [Range(5f, 50f)]
+    public float maxFallSpeed;
 }

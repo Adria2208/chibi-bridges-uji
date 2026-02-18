@@ -23,13 +23,13 @@ public class PlayerController : MonoBehaviour
     private float lastJumpStartTime;
     public float horizontalInput;
     public Rigidbody2D rb { get; private set; }
-    [SerializeField] private CapsuleCollider2D bodyCollider;
+    [SerializeField] private BoxCollider2D bodyCollider;
     private Vector2 bodySize;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        bodyCollider = GetComponent<CapsuleCollider2D>();
+        bodyCollider = GetComponent<BoxCollider2D>();
     }
 
     void Start()
@@ -106,6 +106,8 @@ public class PlayerController : MonoBehaviour
             groundLayer
         );
         isGrounded = hit.collider != null;
+
+        Debug.Log(isGrounded);
     }
 
     private void HandleVariableJumpTime()
@@ -129,6 +131,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.gravityScale = playerData.originalGravityScale * playerData.jumpHangGravityMultiplier;
         }
+
+        rb.linearVelocityY = Mathf.Max(rb.linearVelocityY , -playerData.maxFallSpeed);
     }
 
 }
