@@ -8,6 +8,7 @@ public class PlayerData : ScriptableObject
     public float deceleration;
     public float jumpForce;
     public float jumpBufferTime;
+    public float variableJumpTime;
     public float fastFallMultiplier;
     public float originalGravityScale;
 }

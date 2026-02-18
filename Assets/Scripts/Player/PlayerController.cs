@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction jumpAction;
-    public bool isJumping;
+    public bool wantsJump;
+    private bool isJumpPressed;
 
     [SerializeField] private PlayerData playerData;
 
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     public bool isGrounded { get; private set; }
     public float lastJumpPressedTime;
+    private float lastJumpStartTime;
     public float horizontalInput;
     public Rigidbody2D rb { get; private set; }
     [SerializeField] private CapsuleCollider2D bodyCollider;
@@ -42,9 +44,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         horizontalInput = moveAction.ReadValue<Vector2>().x;
-        isJumping = jumpAction.WasPressedThisFrame();
+        wantsJump = jumpAction.WasPressedThisFrame();
+        isJumpPressed = jumpAction.IsPressed();
 
-        if (isJumping)
+        if (wantsJump)
         {
             lastJumpPressedTime = Time.time;
         }
@@ -63,6 +66,13 @@ public class PlayerController : MonoBehaviour
         );
 
         isGrounded = hit.collider != null;
+
+        if (rb.linearVelocityY > 0 && !isJumpPressed && HasExceededVariableJumpTime())
+        {
+            Debug.Log("Variable Jump Executed");
+            rb.linearVelocityY *= 0.5f;
+
+        }
 
 
         if (rb.linearVelocityY < 0) // Is falling
@@ -92,11 +102,17 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocityX, playerData.jumpForce);
+        lastJumpStartTime = Time.time;
     }
 
     public bool HasBufferedJump()
     {
         return Time.time - lastJumpPressedTime <= playerData.jumpBufferTime;
+    }
+
+    public bool HasExceededVariableJumpTime()
+    {
+        return Time.time - lastJumpStartTime > playerData.variableJumpTime;
     }
 
 }

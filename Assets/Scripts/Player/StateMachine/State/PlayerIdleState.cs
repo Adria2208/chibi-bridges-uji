@@ -24,7 +24,7 @@ public class PlayerIdleState : PlayerBaseState
             player.SwitchState(player.moveState);
         }
 
-        if (player.controller.isJumping)
+        if (player.controller.wantsJump)
         {
             player.SwitchState(player.jumpState);
         }
