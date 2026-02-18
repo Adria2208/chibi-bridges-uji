@@ -56,29 +56,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(
-            bodyCollider.bounds.center,
-            bodySize,
-            0f, // Angle
-            Vector2.down, // Direction
-            feetCollision,
-            groundLayer
-        );
-
-        isGrounded = hit.collider != null;
-
-        if (rb.linearVelocityY > 0 && !isJumpPressed && HasExceededVariableJumpTime())
-        {
-            Debug.Log("Variable Jump Executed");
-            rb.linearVelocityY *= 0.5f;
-
-        }
-
-
-        if (rb.linearVelocityY < 0) // Is falling
-            rb.gravityScale = playerData.originalGravityScale * playerData.fastFallMultiplier;
-        else
-            rb.gravityScale = playerData.originalGravityScale;
+        CheckGrounded();
+        HandleVariableJumpTime();
+        HandleGravity();
 
         debugCurrentSpeedX = Math.Truncate(100 * rb.linearVelocityX) / 100;
         debugCurrentSpeedY = Math.Truncate(100 * rb.linearVelocityY) / 100;
@@ -113,6 +93,42 @@ public class PlayerController : MonoBehaviour
     public bool HasExceededVariableJumpTime()
     {
         return Time.time - lastJumpStartTime > playerData.variableJumpTime;
+    }
+
+    private void CheckGrounded()
+    {
+        RaycastHit2D hit = Physics2D.BoxCast(
+            bodyCollider.bounds.center,
+            bodySize,
+            0f, // Angle
+            Vector2.down, // Direction
+            feetCollision,
+            groundLayer
+        );
+        isGrounded = hit.collider != null;
+    }
+
+    private void HandleVariableJumpTime()
+    {
+        if (rb.linearVelocityY > 0 && !isJumpPressed && HasExceededVariableJumpTime())
+        {
+            rb.linearVelocityY *= playerData.variableJumpTimeVelocityMultiplier;
+        }
+    }
+
+    private void HandleGravity()
+    {
+        float absVelocityY = Mathf.Abs(rb.linearVelocityY);
+
+        if (rb.linearVelocityY < 0) // Is falling
+            rb.gravityScale = playerData.originalGravityScale * playerData.fastFallMultiplier;
+        else
+            rb.gravityScale = playerData.originalGravityScale;
+
+        if (!isGrounded && absVelocityY < playerData.jumpHangThreshold)
+        {
+            rb.gravityScale = playerData.originalGravityScale * playerData.jumpHangGravityMultiplier;
+        }
     }
 
 }

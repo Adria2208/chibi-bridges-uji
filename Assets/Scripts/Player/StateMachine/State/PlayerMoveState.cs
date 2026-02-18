@@ -4,7 +4,7 @@ public class PlayerMoveState : PlayerBaseState
 {
     public override void EnterState(PlayerStateManager player)
     {
-        Debug.Log("Player entered Move State");
+        //Debug.Log("Player entered Move State");
     }
 
     public override void ExitState(PlayerStateManager player)

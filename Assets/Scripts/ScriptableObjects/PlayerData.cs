@@ -14,6 +14,14 @@ public class PlayerData : ScriptableObject
     public float jumpBufferTime;
     [Range(0f, 1f)]
     public float variableJumpTime;
+    [Range(0f, 1f)]
+    public float variableJumpTimeVelocityMultiplier;
+    [Range(0f, 5f)]
+    public float jumpHangThreshold;
+
+    [Header("Fall parameters")]
     public float fastFallMultiplier;
     public float originalGravityScale;
+    [Range(0f, 1f)]
+    public float jumpHangGravityMultiplier;
 }

@@ -18,5 +18,8 @@ MonoBehaviour:
   jumpForce: 15
   jumpBufferTime: 0.2
   variableJumpTime: 0.175
+  variableJumpTimeVelocityMultiplier: 0.5
+  jumpHangThreshold: 0.75
   fastFallMultiplier: 2
   originalGravityScale: 4
+  jumpHangGravityMultiplier: 0.5
