@@ -12,14 +12,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 moveValue;
     public bool isJumping;
 
-
-    [SerializeField] private float maxSpeed;
-
-    [SerializeField] private float acceleration;
-    [SerializeField] private float deceleration;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float fastFallMultiplier;
-    [SerializeField] private float originalGravityScale;
+    [SerializeField] private PlayerData playerData;
 
     [SerializeField] private double debugCurrentSpeedX;
     [SerializeField] private double debugCurrentSpeedY;
@@ -40,8 +33,6 @@ public class PlayerController : MonoBehaviour
     {
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
-
-        originalGravityScale = rb.gravityScale;
 
         bodySize = bodyCollider.bounds.size;
         bodySize.y -= feetCollision;
@@ -69,9 +60,9 @@ public class PlayerController : MonoBehaviour
 
 
         if (rb.linearVelocityY < 0) // Is falling
-            rb.gravityScale = originalGravityScale * fastFallMultiplier;
+            rb.gravityScale = playerData.originalGravityScale * playerData.fastFallMultiplier;
         else
-            rb.gravityScale = originalGravityScale;
+            rb.gravityScale = playerData.originalGravityScale;
 
         debugCurrentSpeedX = Math.Truncate(100 * rb.linearVelocityX) / 100;
         debugCurrentSpeedY = Math.Truncate(100 * rb.linearVelocityY) / 100;
@@ -79,11 +70,11 @@ public class PlayerController : MonoBehaviour
 
     public void Move()
     {
-        float targetSpeed = moveValue.x * maxSpeed;
+        float targetSpeed = moveValue.x * playerData.maxSpeed;
         float speedDifference = targetSpeed - rb.linearVelocityX;
 
         // Use acceleration when input exists, deceleration when stopping
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : deceleration;
+        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? playerData.acceleration : playerData.deceleration;
 
         float movement = accelRate * speedDifference * Time.fixedDeltaTime;
 
@@ -94,7 +85,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocityX, playerData.jumpForce);
     }
 
 }

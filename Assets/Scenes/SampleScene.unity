@@ -378,12 +378,7 @@ MonoBehaviour:
     m_Bits: 8
   moveValue: {x: 0, y: 0}
   isJumping: 0
-  maxSpeed: 10
-  acceleration: 2
-  deceleration: 4
-  jumpForce: 6
-  fastFallMultiplier: 1.5
-  originalGravityScale: 0
+  playerData: {fileID: 11400000, guid: 0a291f8eaa5347ff79e7886f44c606cd, type: 2}
   debugCurrentSpeedX: 0
   debugCurrentSpeedY: 0
   bodyCollider: {fileID: 90332380}
