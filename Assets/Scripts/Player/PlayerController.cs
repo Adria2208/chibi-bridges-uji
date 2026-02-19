@@ -19,8 +19,10 @@ public class PlayerController : MonoBehaviour
 
 
     public bool isGrounded { get; private set; }
+    public bool isFalling { get; private set; }
     public float lastJumpPressedTime;
     private float lastJumpStartTime;
+    private float lastGroundedTime;
     public float horizontalInput;
     public Rigidbody2D rb { get; private set; }
     [SerializeField] private BoxCollider2D bodyCollider;
@@ -81,11 +83,12 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump()
     {
+        Debug.Log("Executed Jump");
         rb.linearVelocity = new Vector2(rb.linearVelocityX, playerData.jumpForce);
         lastJumpStartTime = Time.time;
     }
 
-    public bool HasBufferedJump()
+    public bool IsBufferedJumpAvailable()
     {
         return Time.time - lastJumpPressedTime <= playerData.jumpBufferTime;
     }
@@ -107,7 +110,10 @@ public class PlayerController : MonoBehaviour
         );
         isGrounded = hit.collider != null;
 
-        Debug.Log(isGrounded);
+        if (isGrounded)
+        {
+            lastGroundedTime = Time.time;
+        }
     }
 
     private void HandleVariableJumpTime()
@@ -121,8 +127,9 @@ public class PlayerController : MonoBehaviour
     private void HandleGravity()
     {
         float absVelocityY = Mathf.Abs(rb.linearVelocityY);
+        isFalling = rb.linearVelocityY < 0;
 
-        if (rb.linearVelocityY < 0) // Is falling
+        if (isFalling)
             rb.gravityScale = playerData.originalGravityScale * playerData.fastFallMultiplier;
         else
             rb.gravityScale = playerData.originalGravityScale;
@@ -133,6 +140,11 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.linearVelocityY = Mathf.Max(rb.linearVelocityY , -playerData.maxFallSpeed);
+    }
+
+    public bool HasCoyoteTimeRemaining()
+    {
+        return Time.time - lastGroundedTime <= playerData.coyoteTimeThreshold;
     }
 
 }

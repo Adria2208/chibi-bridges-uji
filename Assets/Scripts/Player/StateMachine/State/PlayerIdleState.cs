@@ -23,10 +23,22 @@ public class PlayerIdleState : PlayerBaseState
         {
             player.SwitchState(player.moveState);
         }
-
+        if (player.controller.isFalling)
+        {
+            player.SwitchState(player.fallState);
+        }
         if (player.controller.wantsJump)
         {
-            player.SwitchState(player.jumpState);
+            if (player.controller.isGrounded)
+            {
+                player.SwitchState(player.jumpState);
+            }
+            else if (player.controller.HasCoyoteTimeRemaining())
+            {
+                //TODO: Test this scenario
+                player.SwitchState(player.jumpState);
+            }
         }
+
     }
 }

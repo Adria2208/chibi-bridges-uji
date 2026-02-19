@@ -26,9 +26,16 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        if (player.controller.wantsJump && player.controller.isGrounded)
+        if (player.controller.wantsJump)
         {
-            player.SwitchState(player.jumpState);
+            if (player.controller.isGrounded)
+            {
+                player.SwitchState(player.jumpState);
+            }
+            else if (player.controller.HasCoyoteTimeRemaining())
+            {
+                player.SwitchState(player.jumpState);
+            }
         }
     }
 }

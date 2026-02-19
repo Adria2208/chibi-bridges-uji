@@ -26,4 +26,6 @@ public class PlayerData : ScriptableObject
     public float jumpHangGravityMultiplier;
     [Range(5f, 50f)]
     public float maxFallSpeed;
+    [Range(0f, 0.5f)]
+    public float coyoteTimeThreshold;
 }

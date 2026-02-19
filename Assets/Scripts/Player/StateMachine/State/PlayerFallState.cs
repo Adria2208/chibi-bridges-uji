@@ -21,10 +21,10 @@ public class PlayerFallState : PlayerBaseState
     {
         if (player.controller.isGrounded)
         {
-            if (player.controller.HasBufferedJump())
+            if (player.controller.IsBufferedJumpAvailable())
             {
                 player.SwitchState(player.jumpState);
-            } 
+            }
             else if (player.controller.horizontalInput != 0f)
             {
                 player.SwitchState(player.moveState);
@@ -33,7 +33,6 @@ public class PlayerFallState : PlayerBaseState
             {
                 player.SwitchState(player.idleState);
             }
-
         }
     }
 }
