@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump()
     {
-        Debug.Log("Executed Jump");
+        //Debug.Log("Executed Jump");
         rb.linearVelocity = new Vector2(rb.linearVelocityX, playerData.jumpForce);
         lastJumpStartTime = Time.time;
     }
